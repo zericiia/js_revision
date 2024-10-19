@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rock Paper Scissors</title>
+    <style>
+      body {
+        background-color: #212121;
+        color: white;
+      }
+      .rockpaper-btn {
+        height: 100px;
+        width: 100px;
+        color: white;
+        font-size: 21px;
+        background-color: transparent;
+        border: 2px solid white;
+        border-radius: 50%;
+        margin-right: 20px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- start rock paper -->
+    <p>Rock Paper Scissors</p>
+    <button class="rockpaper-btn rock-button-js">Rock</button>
+    <button class="rockpaper-btn paper-button-js">Paper</button>
+    <button class="rockpaper-btn cissors-button-js">Scissors</button>
+    <p class="js-result"></p>
+    <p class="js-move"></p>
+    <p class="ScoreJS">Score</p>
+    <button onclick="resetScore()">Reset Score</button>
+    <button onclick="autoplay()" class="js-auto-play">Auto Play</button>
+    <!-- end rock paper -->
+    <script>
+      // start event listnner
+      document
+        .querySelector(".rock-button-js")
+        .addEventListener("click", () => {
+          rockPaperCissor("rock");
+        });
+      document
+        .querySelector(".paper-button-js")
+        .addEventListener("click", () => {
+          rockPaperCissor("paper");
+        });
+      document
+        .querySelector(".cissors-button-js")
+        .addEventListener("click", () => {
+          rockPaperCissor("scissors");
+        });
+      document.body.addEventListener("keydown", (event) => {
+        if (event.key === "r") {
+          rockPaperCissor("rock");
+        } else if (event.key === "p") {
+          rockPaperCissor("paper");
+        } else if (event.key === "s") {
+          rockPaperCissor("scissors");
+        }
+      });
+      // Start rock paper scissors
+
+      let score = JSON.parse(localStorage.getItem("score")) || {
+        wins: 0,
+        losses: 0,
+        ties: 0,
+      };
+      result = "";
+      rock: function rockPaperCissor(playerDecision) {
+        let listDecision = ["rock", "paper", "scissors"];
+        let randomChoice =
+          listDecision[Math.floor(Math.random() * listDecision.length)];
+
+        if (playerDecision === randomChoice) {
+          result = "tie";
+        } else if (
+          (playerDecision === "rock" && randomChoice === "scissors") ||
+          (playerDecision === "paper" && randomChoice === "rock") ||
+          (playerDecision === "scissors" && randomChoice === "paper")
+        ) {
+          result = "win";
+        } else {
+          result = "loss";
+        }
+        if (result === "win") {
+          score.wins++;
+        } else if (result === "loss") {
+          score.losses++;
+        } else if (result === "tie") {
+          score.ties++;
+        }
+        // console.log(PScore);
+        document.querySelector(".js-result").innerHTML = `${result}`;
+
+        document.querySelector(
+          ".js-move"
+        ).innerHTML = `you picked: ${playerDecision}  -  Computer: ${randomChoice}`;
+
+        displayScore();
+        jsonScore = JSON.stringify(score);
+        localStorage.setItem("score", jsonScore);
+      }
+      function displayScore() {
+        document.querySelector(
+          ".ScoreJS"
+        ).innerHTML = `\n Wins: ${score.wins}, Ties: ${score.ties}, Losses: ${score.losses}`;
+      }
+      function resetScore() {
+        score = { wins: 0, losses: 0, ties: 0 };
+        displayScore();
+        localStorage.removeItem("score");
+      }
+
+      let intervalId;
+      function autoplay() {
+        let elementHmtl = document.querySelector(".js-auto-play");
+        if (elementHmtl.innerHTML === "Auto Play") {
+          elementHmtl.innerHTML = "Stop playing";
+          let listDecision = ["rock", "paper", "scissors"];
+          // interval
+          intervalId = setInterval(function () {
+            let playerChoice =
+              listDecision[Math.floor(Math.random() * listDecision.length)];
+            rockPaperCissor(playerChoice);
+          }, 1000);
+        } else {
+          elementHmtl.innerHTML = "Auto Play";
+          clearInterval(intervalId);
+        }
+      }
+      //End rock paper Scissors
+    </script>
+  </body>
+</html>

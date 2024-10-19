@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .subscribe-btn {
+        box-sizing: border-box;
+        padding: 10px 15px;
+        font-weight: bold;
+        border-radius: 50px;
+        border: none;
+        background-color: black;
+        color: white;
+        cursor: pointer;
+      }
+      .is-subscribed {
+        box-sizing: border-box;
+        background-color: #dddddd;
+        color: black;
+      }
+      .order-input {
+        font-size: 15px;
+        padding: 10px 15px;
+      }
+      .calculate-btn {
+        border: none;
+        background-color: #13c013;
+        padding: 12px 15px;
+        color: white;
+        font-size: 15px;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- start subsucribe -->
+    <button class="BtnJs subscribe-btn" onclick="subscribe()">Subscribe</button>
+    <!-- end subsucribe -->
+
+    <!-- start rock paper -->
+    <p>Rock Paper Scissors</p>
+    <button onclick="rockPaperCissor('rock')">Rock</button>
+    <button onclick="rockPaperCissor('paper')">Paper</button>
+    <button onclick="rockPaperCissor('scissors')">Scissors</button>
+    <p class="js-result"></p>
+    <p class="js-move"></p>
+    <p class="ScoreJS">Score</p>
+    <button onclick="resetScore()">Reset Score</button>
+    <!-- end rock paper -->
+    <hr />
+    <!-- start calculate -->
+    <input
+      type="text"
+      placeholder="Cost of order"
+      class="js-calculate-input order-input"
+      onkeydown="keydown(event)"
+    />
+    <button class="js-calculate calculate-btn" onclick="CostCalculate()">
+      Calculate
+    </button>
+    <p class="js-cost">cost</p>
+    <!-- end calculate -->
+    <script>
+      function subscribe() {
+        const buttonElement = document.querySelector(".BtnJs");
+        if (buttonElement.innerHTML === "Subscribe") {
+          buttonElement.innerHTML = "Subscribed";
+          buttonElement.classList.add("is-subscribed");
+        } else {
+          buttonElement.innerHTML = "Subscribe";
+          buttonElement.classList.remove("is-subscribed");
+        }
+      }
+      // Start rock paper scissors
+      let score = JSON.parse(localStorage.getItem("score")) || {
+        wins: 0,
+        losses: 0,
+        ties: 0,
+      };
+      result = "";
+      rock: function rockPaperCissor(playerDecision) {
+        let listDecision = ["rock", "paper", "scissors"];
+        let randomChoice =
+          listDecision[Math.floor(Math.random() * listDecision.length)];
+
+        if (playerDecision === randomChoice) {
+          result = "tie";
+        } else if (
+          (playerDecision === "rock" && randomChoice === "scissors") ||
+          (playerDecision === "paper" && randomChoice === "rock") ||
+          (playerDecision === "scissors" && randomChoice === "paper")
+        ) {
+          result = "win";
+        } else {
+          result = "loss";
+        }
+        if (result === "win") {
+          score.wins++;
+        } else if (result === "loss") {
+          score.losses++;
+        } else if (result === "tie") {
+          score.ties++;
+        }
+        // console.log(PScore);
+        document.querySelector(".js-result").innerHTML = `${result}`;
+
+        document.querySelector(
+          ".js-move"
+        ).innerHTML = `you picked: ${playerDecision}  -  Computer: ${randomChoice}`;
+
+        displayScore();
+        jsonScore = JSON.stringify(score);
+        localStorage.setItem("score", jsonScore);
+      }
+      function displayScore() {
+        document.querySelector(
+          ".ScoreJS"
+        ).innerHTML = `\n Wins: ${score.wins}, Ties: ${score.ties}, Losses: ${score.losses}`;
+      }
+      function resetScore() {
+        score = { wins: 0, losses: 0, ties: 0 };
+        displayScore();
+        localStorage.removeItem("score");
+      }
+      //End rock paper Scissors
+      //
+      function CostCalculate() {
+        let cost = Number(document.querySelector(".js-calculate-input").value);
+        console.log(cost);
+        if (cost < 40) {
+          cost = cost + 10;
+        } else {
+        }
+        document.querySelector(".js-cost").innerHTML = `$ ${cost}`;
+      }
+      function keydown(event) {
+        console.log(event);
+        if (event.key === "Enter") {
+          CostCalculate();
+        }
+      }
+    </script>
+  </body>
+</html>

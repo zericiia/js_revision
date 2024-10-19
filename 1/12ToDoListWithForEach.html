@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="styles/11-todo-list.css" />
+  </head>
+  <body>
+    <p>To Do List Project 1</p>
+    <div class="grid-3">
+      <input
+        placeholder="Todo name"
+        type="text"
+        class="input-js"
+        onkeydown="keydown(event)"
+      />
+      <input class="js-due-date date-input" type="date" value="today()" />
+      <button class="add-js add-btn" onclick="addToDo()">Add</button>
+    </div>
+    <div class="result-js grid-3">text</div>
+
+    <script>
+      let ToDoList = [
+        {
+          name: "Wash Clothes",
+          dueDate: "2024-10-10",
+        },
+        {
+          name: "Clean The House",
+          dueDate: "2024-10-10",
+        },
+      ];
+      window.onload = function () {
+        addToDo();
+      };
+      function addToDo() {
+        const inputElement = document.querySelector(".input-js");
+        const divElement = document.querySelector(".result-js");
+        const dateElement = document.querySelector(".js-due-date");
+        const name = inputElement.value;
+        const dueDate = dateElement.value;
+
+        if (inputElement.value.trim() !== "") {
+          ToDoList.push({
+            // name: name,
+            // dueDate: dueDate,
+            name,
+            dueDate,
+          });
+        }
+        // Clear the div before rendering the updated list
+        divElement.innerHTML = "";
+        // Clear the input field
+        inputElement.value = "";
+        // render the dom
+        ToDoList.forEach(function (todoObject, index) {
+          const { name, dueDate } = todoObject;
+          divElement.innerHTML += `
+          <div>${name}</div>
+          <div>${dueDate}</div>
+            <button onclick="
+            deleteFromArray(${index})"
+            class="delete-btn">Delete
+            </button>`;
+        });
+        // console.log(divElement.innerHTML);
+        // console.log(ToDoList);
+      }
+      function deleteFromArray(i) {
+        ToDoList.splice(i, 1);
+        addToDo();
+        // call addtodo to render the dom again
+      }
+      function keydown(event) {
+        if (event.key === "Enter") {
+          addToDo();
+        }
+      }
+    </script>
+  </body>
+</html>

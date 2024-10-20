@@ -66,7 +66,7 @@ products.forEach((prodcut, index) => {
           )}</div>
 
           <div class="product-quantity-container">
-            <select>
+            <select class="js-quantity-selector-${prodcut.id}">
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -96,15 +96,22 @@ products.forEach((prodcut, index) => {
   `;
 });
 document.querySelector(".js-products-grid").innerHTML = productHtml;
+// end generating the products
 
 // start button interactivity
 
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
   button.addEventListener("click", () => {
     const productId = button.dataset.productId;
+    // add the selector quantity
+    let selectorValue = parseInt(
+      document.querySelector(`.js-quantity-selector-${productId}`).value,
+      10
+    );
+    console.log(selectorValue);
 
     let matchingItem;
-
+    // check if it exist in the cart before
     cart.forEach((item) => {
       if (productId === item.productId) {
         matchingItem = item;
@@ -112,17 +119,20 @@ document.querySelectorAll(".js-add-to-cart").forEach((button) => {
     });
 
     if (matchingItem) {
-      matchingItem.quantity += 1;
+      matchingItem.quantity += selectorValue;
     } else {
       cart.push({
         productId: productId,
-        quantity: 1,
+        quantity: selectorValue,
       });
     }
     let cartItemsQuantity = 0;
+
     cart.forEach((item) => {
       cartItemsQuantity += item.quantity;
     });
+    console.log(cart);
+
     document.querySelector(".js-cart-quantity").innerHTML = cartItemsQuantity;
   });
 });

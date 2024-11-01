@@ -1,41 +1,5 @@
-// const products = [
-//   {
-//     image: "images/products/athletic-cotton-socks-6-pairs.jpg",
-//     name: "Black and Gray Athletic Cotton Socks - 6 Pairs",
-//     rating: {
-//       starts: 4.5,
-//       count: 87,
-//     },
-//     priceCents: 1090,
-//   },
-//   {
-//     image: "images/products/intermediate-composite-basketball.jpg",
-//     name: "Intermediate Size Basketball",
-//     rating: {
-//       starts: 4,
-//       count: 127,
-//     },
-//     priceCents: 2095,
-//   },
-//   {
-//     image: "images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg",
-//     name: "Adults Plain Cotton T-Shirt - 2 Pack",
-//     rating: {
-//       starts: 4.5,
-//       count: 56,
-//     },
-//     priceCents: 799,
-//   },
-//   {
-//     image: "images/products/black-2-slot-toaster.jpg",
-//     name: "2 Slot Toaster - Black",
-//     rating: {
-//       starts: 5,
-//       count: 2197,
-//     },
-//     priceCents: 1899,
-//   },
-// ];
+import { cart } from "../data/carts.js";
+import { products } from "../data/products.js";
 let productHtml = "";
 products.forEach((prodcut, index) => {
   productHtml += `
@@ -82,7 +46,7 @@ products.forEach((prodcut, index) => {
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart">
+          <div class="added-to-cart js-added-text-${prodcut.id}" >
             <img src="images/icons/checkmark.png" />
             Added
           </div>
@@ -99,6 +63,7 @@ document.querySelector(".js-products-grid").innerHTML = productHtml;
 // end generating the products
 
 // start button interactivity
+let timeoutId;
 
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
   button.addEventListener("click", () => {
@@ -108,15 +73,26 @@ document.querySelectorAll(".js-add-to-cart").forEach((button) => {
       document.querySelector(`.js-quantity-selector-${productId}`).value,
       10
     );
-    console.log(selectorValue);
+    // add the added text
+    // addedTextElement = document.querySelector(`.js-added-text-${productId}`);
+    // addedTextElement.classList.add("added-to-cart-visible");
+    // // remove the class
+    // if (timeoutId) {
+    //   clearTimeout(timeoutId);
+    // }
 
-    let matchingItem;
+    // timeoutId = setTimeout(() => {
+    //   addedTextElement.classList.remove("added-to-cart-visible");
+    // }, 1000);
+
     // check if it exist in the cart before
-    cart.forEach((item) => {
-      if (productId === item.productId) {
-        matchingItem = item;
-      }
-    });
+    // let matchingItem;
+    // cart.forEach((item) => {
+    //   if (productId === item.productId) {
+    //     matchingItem = item;
+    //   }
+    // });
+    let matchingItem = cart.find((item) => item.productId === productId);
 
     if (matchingItem) {
       matchingItem.quantity += selectorValue;

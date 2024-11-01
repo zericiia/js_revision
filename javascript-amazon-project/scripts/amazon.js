@@ -64,6 +64,48 @@ document.querySelector(".js-products-grid").innerHTML = productHtml;
 
 // start button interactivity
 let timeoutId;
+function AddText(productId) {
+  let addedTextElement = document.querySelector(`.js-added-text-${productId}`);
+
+  addedTextElement.classList.add("added-to-cart-visible");
+
+  //  remove the class
+
+  if (timeoutId) {
+    clearTimeout(timeoutId);
+  }
+
+  timeoutId = setTimeout(() => {
+    addedTextElement.classList.remove("added-to-cart-visible");
+  }, 1000);
+}
+function AddToCart(productId, selectorValue) {
+  let matchingItem;
+  cart.forEach((item) => {
+    if (productId === item.productId) {
+      matchingItem = item;
+    }
+  });
+
+  if (matchingItem) {
+    matchingItem.quantity += selectorValue;
+  } else {
+    cart.push({
+      productId: productId,
+      quantity: selectorValue,
+    });
+  }
+}
+function UpdateCart() {
+  let cartItemsQuantity = 0;
+
+  cart.forEach((item) => {
+    cartItemsQuantity += item.quantity;
+  });
+  console.log(cart);
+
+  document.querySelector(".js-cart-quantity").innerHTML = cartItemsQuantity;
+}
 
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
   button.addEventListener("click", () => {
@@ -73,43 +115,10 @@ document.querySelectorAll(".js-add-to-cart").forEach((button) => {
       document.querySelector(`.js-quantity-selector-${productId}`).value,
       10
     );
-    // add the added text
-    // addedTextElement = document.querySelector(`.js-added-text-${productId}`);
-    // addedTextElement.classList.add("added-to-cart-visible");
-    // // remove the class
-    // if (timeoutId) {
-    //   clearTimeout(timeoutId);
-    // }
 
-    // timeoutId = setTimeout(() => {
-    //   addedTextElement.classList.remove("added-to-cart-visible");
-    // }, 1000);
-
-    // check if it exist in the cart before
-    // let matchingItem;
-    // cart.forEach((item) => {
-    //   if (productId === item.productId) {
-    //     matchingItem = item;
-    //   }
-    // });
-    let matchingItem = cart.find((item) => item.productId === productId);
-
-    if (matchingItem) {
-      matchingItem.quantity += selectorValue;
-    } else {
-      cart.push({
-        productId: productId,
-        quantity: selectorValue,
-      });
-    }
-    let cartItemsQuantity = 0;
-
-    cart.forEach((item) => {
-      cartItemsQuantity += item.quantity;
-    });
-    console.log(cart);
-
-    document.querySelector(".js-cart-quantity").innerHTML = cartItemsQuantity;
+    AddText(productId);
+    AddToCart(productId, selectorValue);
+    UpdateCart();
   });
 });
 // end btn interactivity

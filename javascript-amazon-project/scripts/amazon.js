@@ -1,5 +1,6 @@
 import { cart, AddToCart } from "../data/carts.js";
 import { products } from "../data/products.js";
+import { formatCurency } from "./utils/money.js";
 // start generating html for prodcuts
 let productHtml = "";
 products.forEach((prodcut, index) => {
@@ -26,9 +27,7 @@ products.forEach((prodcut, index) => {
             }</div>
           </div>
 
-          <div class="product-price">$${(prodcut.priceCents / 100).toFixed(
-            2
-          )}</div>
+          <div class="product-price">$${formatCurency(prodcut.priceCents)}</div>
 
           <div class="product-quantity-container">
             <select class="js-quantity-selector-${prodcut.id}">

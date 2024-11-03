@@ -1,5 +1,6 @@
-import { cart } from "../data/carts.js";
+import { cart, AddToCart } from "../data/carts.js";
 import { products } from "../data/products.js";
+// start generating html for prodcuts
 let productHtml = "";
 products.forEach((prodcut, index) => {
   productHtml += `
@@ -59,10 +60,12 @@ products.forEach((prodcut, index) => {
         </div>
   `;
 });
+
 document.querySelector(".js-products-grid").innerHTML = productHtml;
 // end generating the products
 
 // start button interactivity
+// functions
 let timeoutId;
 function AddText(productId) {
   let addedTextElement = document.querySelector(`.js-added-text-${productId}`);
@@ -79,34 +82,18 @@ function AddText(productId) {
     addedTextElement.classList.remove("added-to-cart-visible");
   }, 1000);
 }
-function AddToCart(productId, selectorValue) {
-  let matchingItem;
-  cart.forEach((item) => {
-    if (productId === item.productId) {
-      matchingItem = item;
-    }
-  });
 
-  if (matchingItem) {
-    matchingItem.quantity += selectorValue;
-  } else {
-    cart.push({
-      productId: productId,
-      quantity: selectorValue,
-    });
-  }
-}
-function UpdateCart() {
+function UpdateCarQunatity() {
   let cartItemsQuantity = 0;
 
-  cart.forEach((item) => {
-    cartItemsQuantity += item.quantity;
+  cart.forEach((cartItem) => {
+    cartItemsQuantity += cartItem.quantity;
   });
   console.log(cart);
 
   document.querySelector(".js-cart-quantity").innerHTML = cartItemsQuantity;
 }
-
+//  add button action
 document.querySelectorAll(".js-add-to-cart").forEach((button) => {
   button.addEventListener("click", () => {
     const productId = button.dataset.productId;
@@ -118,7 +105,7 @@ document.querySelectorAll(".js-add-to-cart").forEach((button) => {
 
     AddText(productId);
     AddToCart(productId, selectorValue);
-    UpdateCart();
+    UpdateCarQunatity();
   });
 });
 // end btn interactivity

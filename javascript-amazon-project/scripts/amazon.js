@@ -82,7 +82,7 @@ function AddText(productId) {
   }, 1000);
 }
 
-function UpdateCarQunatity() {
+function UpdateCartQunatity() {
   let cartItemsQuantity = 0;
 
   cart.forEach((cartItem) => {
@@ -104,7 +104,7 @@ document.querySelectorAll(".js-add-to-cart").forEach((button) => {
 
     AddText(productId);
     AddToCart(productId, selectorValue);
-    UpdateCarQunatity();
+    UpdateCartQunatity();
   });
 });
 // end btn interactivity

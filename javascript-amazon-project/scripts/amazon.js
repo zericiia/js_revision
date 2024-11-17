@@ -108,3 +108,13 @@ document.querySelectorAll(".js-add-to-cart").forEach((button) => {
   });
 });
 // end btn interactivity
+function onloadRefreshCartNumber() {
+  let cartItemsQuantity = 0;
+  cart.forEach((cartItem) => {
+    cartItemsQuantity += cartItem.quantity;
+  });
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector(".js-cart-quantity").innerHTML = cartItemsQuantity;
+  });
+}
+onloadRefreshCartNumber();

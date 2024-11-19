@@ -1,4 +1,9 @@
-import { cart, AddToCart } from "../data/carts.js";
+import {
+  cart,
+  AddToCart,
+  calculateCartQuantity,
+  updateCartQunatity,
+} from "../data/carts.js";
 import { products } from "../data/products.js";
 import { formatCurency } from "./utils/money.js";
 // start generating html for prodcuts
@@ -61,6 +66,7 @@ products.forEach((prodcut, index) => {
 });
 
 document.querySelector(".js-products-grid").innerHTML = productHtml;
+
 // end generating the products
 
 // start button interactivity
@@ -83,13 +89,7 @@ function AddText(productId) {
 }
 
 function UpdateCartQunatity() {
-  let cartItemsQuantity = 0;
-
-  cart.forEach((cartItem) => {
-    cartItemsQuantity += cartItem.quantity;
-  });
-  console.log(cart);
-
+  let cartItemsQuantity = calculateCartQuantity();
   document.querySelector(".js-cart-quantity").innerHTML = cartItemsQuantity;
 }
 //  add button action
@@ -108,13 +108,5 @@ document.querySelectorAll(".js-add-to-cart").forEach((button) => {
   });
 });
 // end btn interactivity
-function onloadRefreshCartNumber() {
-  let cartItemsQuantity = 0;
-  cart.forEach((cartItem) => {
-    cartItemsQuantity += cartItem.quantity;
-  });
-  document.addEventListener("DOMContentLoaded", function () {
-    document.querySelector(".js-cart-quantity").innerHTML = cartItemsQuantity;
-  });
-}
-onloadRefreshCartNumber();
+// update cart onload
+UpdateCartQunatity();

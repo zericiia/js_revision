@@ -45,4 +45,16 @@ export function DeleteFromCart(productIdToRemove) {
     cart.splice(index, 1);
   }
   saveToStorage();
+  let cartItemNumber = document.querySelector(".js-checkout");
+  updateCartQunatity(cartItemNumber);
+}
+export function calculateCartQuantity() {
+  let cartItemsQuantity = 0;
+  cart.forEach((cartItem) => {
+    cartItemsQuantity += cartItem.quantity;
+  });
+  return cartItemsQuantity;
+}
+export function updateCartQunatity(element = "", extraHtml = "") {
+  element.innerHTML = calculateCartQuantity() + extraHtml;
 }

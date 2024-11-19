@@ -1,4 +1,4 @@
-import { cart, DeleteFromCart } from "../data/carts.js";
+import { cart, DeleteFromCart, updateCartQunatity } from "../data/carts.js";
 import { products } from "../data/products.js";
 import { formatCurency } from "./utils/money.js";
 
@@ -12,7 +12,7 @@ cart.forEach((cartItem, index) => {
     }
   });
   //   console.log(matchingItem);
-
+  // base html to load
   cartHtml += `
         <div class="cart-item-container js-cart-item-container-${
           matchingItem.id
@@ -38,7 +38,9 @@ cart.forEach((cartItem, index) => {
                       cartItem.quantity
                     }</span>
                   </span>
-                  <span class="update-quantity-link link-primary">
+                  <span class="update-quantity-link link-primary js-update-link-cart-product" data-product-id="${
+                    matchingItem.id
+                  }" >
                     Update
                   </span>
                   <span class="delete-quantity-link link-primary js-link-cart-product" data-product-id="${
@@ -99,8 +101,8 @@ cart.forEach((cartItem, index) => {
 });
 
 document.querySelector(".js-order-summary").innerHTML = cartHtml;
-// delete btn interartivity
 
+// delete btn interartivity
 document.querySelectorAll(".js-link-cart-product").forEach((link) => {
   link.addEventListener("click", () => {
     const productId = link.dataset.productId;
@@ -111,3 +113,14 @@ document.querySelectorAll(".js-link-cart-product").forEach((link) => {
     container.remove();
   });
 });
+
+// update btn interartivity
+document.querySelectorAll(".js-update-link-cart-product").forEach((link) => {
+  link.addEventListener("click", () => {
+    const productId = link.dataset.productId;
+    console.log(productId);
+  });
+});
+// load cart quntity
+let cartItemNumber = document.querySelector(".js-checkout");
+updateCartQunatity(cartItemNumber, " items");

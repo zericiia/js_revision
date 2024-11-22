@@ -61,3 +61,13 @@ export function calculateCartQuantity() {
 export function updateCartQunatity(element = "", extraHtml = "") {
   element.innerHTML = calculateCartQuantity() + extraHtml;
 }
+export function UpdateDeliveyOption(productId, deliveryOptionId) {
+  let matchingItem;
+  cart.forEach((cartItem) => {
+    if (productId === cartItem.productId) {
+      matchingItem = cartItem;
+    }
+  });
+  matchingItem.deliveryOptionId = deliveryOptionId;
+  saveToStorage();
+}

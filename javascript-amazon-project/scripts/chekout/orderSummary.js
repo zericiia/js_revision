@@ -4,31 +4,21 @@ import {
   updateCartQunatity,
   UpdateDeliveyOption,
 } from "../../data/carts.js";
-import { deliveryOptions } from "../../data/deliveryOptions.js";
-import { products } from "../../data/products.js";
+import {
+  deliveryOptions,
+  getDeliveryOption,
+} from "../../data/deliveryOptions.js";
+import { products, getProduct } from "../../data/products.js";
 import { formatCurency } from "../utils/money.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
-
+import { renderPaymentSummary } from "../chekout/paymentSummary.js";
 export function renderOrderSummery() {
   let cartHtml = "";
   cart.forEach((cartItem, index) => {
     const prodcutId = cartItem.productId;
-    let matchingItem;
-    products.forEach((product) => {
-      if (product.id === prodcutId) {
-        matchingItem = product;
-      }
-    });
-    //   console.log(matchingItem);
-    // base html to load
-
     const deliveryOptionID = cartItem.deliveryOptionId;
-    let deliveryOption;
-    deliveryOptions.forEach((option) => {
-      if (option.id === deliveryOptionID) {
-        deliveryOption = option;
-      }
-    });
+    let matchingItem = getProduct(prodcutId);
+    let deliveryOption = getDeliveryOption(deliveryOptionID);
 
     const today = dayjs();
     const deliveryDate = today.add(deliveryOption.deliveryDays, "days");
@@ -128,6 +118,7 @@ export function renderOrderSummery() {
         `.js-cart-item-container-${productId}`
       );
       container.remove();
+      renderPaymentSummary();
     });
   });
 
@@ -141,13 +132,14 @@ export function renderOrderSummery() {
   // load cart quntity
   let cartItemNumber = document.querySelector(".js-checkout");
   updateCartQunatity(cartItemNumber, " items");
-
+  // input button clicked render the page
   document.querySelectorAll(".js-delivery-option").forEach((element) => {
     element.addEventListener("click", () => {
       const { productId, deliveryOptionId } = element.dataset;
 
       UpdateDeliveyOption(productId, deliveryOptionId);
       renderOrderSummery();
+      renderPaymentSummary();
     });
   });
 }
